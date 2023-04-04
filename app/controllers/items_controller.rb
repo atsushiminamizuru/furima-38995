@@ -14,10 +14,11 @@ class ItemsController < ApplicationController
   end
 
   def index
-    # @items = Item.all
+    @items = Item.all.order('created_at DESC')
   end
 
   def show
+    # @item = Item.find(params[:id])
   end
 
   def edit
@@ -27,6 +28,10 @@ class ItemsController < ApplicationController
   end
 
   def destroy
+    # item = Item.find(params[:id])
+    # redirect_to root_path unless current_user.id == item.user_id
+    # item.destroy
+    # redirect_to root_path
   end
 
   private
