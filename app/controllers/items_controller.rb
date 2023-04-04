@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
+  before_action :is_matching_login_user, only: [:edit, :update]
   def new
     @item = Item.new
   end
@@ -22,13 +23,9 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    @item = Item.find(params[:id])
-    redirect_to root_path unless current_user.id == @item.user_id
   end
 
   def update
-    @item = Item.find(params[:id])
-    redirect_to root_path unless current_user.id == @item.user_id
     if @item.update(item_params)
       redirect_to item_path(@item.id)
     else
@@ -54,5 +51,10 @@ class ItemsController < ApplicationController
       :item_prefecture_id,
       :item_scheduled_delivery_id
     ).merge(user_id: current_user.id)
+  end
+
+  def is_matching_login_user
+    @item = Item.find(params[:id])
+    redirect_to root_path unless current_user.id == @item.user_id
   end
 end
