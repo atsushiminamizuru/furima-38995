@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :is_matching_login_user, only: [:edit, :update]
+  before_action :matching_login_user, only: [:edit, :update, :destroy]
   def new
     @item = Item.new
   end
@@ -34,10 +34,8 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    # item = Item.find(params[:id])
-    # redirect_to root_path unless current_user.id == item.user_id
-    # item.destroy
-    # redirect_to root_path
+    @item.destroy
+    redirect_to root_path
   end
 
   private
@@ -53,7 +51,7 @@ class ItemsController < ApplicationController
     ).merge(user_id: current_user.id)
   end
 
-  def is_matching_login_user
+  def matching_login_user
     @item = Item.find(params[:id])
     redirect_to root_path unless current_user.id == @item.user_id
   end
