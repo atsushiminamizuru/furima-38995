@@ -14,6 +14,9 @@ RSpec.describe Item, type: :model do
       it 'item_priceが半角数値かつ300以上9,999,999以下であれば登録できる' do
         expect(@item).to be_valid
       end
+      it 'userが紐づいていれば登録できる' do
+        expect(@item).to be_valid
+      end
     end
     context '新規登録できない場合' do
       it 'imageが空では登録できない' do
@@ -85,6 +88,11 @@ RSpec.describe Item, type: :model do
         @item.item_price = Faker::Number.between(from: 10_000_000, to: 99_999_999)
         @item.valid?
         expect(@item.errors.full_messages).to include('Item price is out of setting range')
+      end
+      it 'userが紐づいていなければ登録できない' do
+        @item.user_id = 'nil'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('User must exist')
       end
     end
   end
