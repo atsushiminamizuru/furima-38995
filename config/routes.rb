@@ -4,8 +4,4 @@ Rails.application.routes.draw do
   resources :items do
     resources :orders, only: [:index, :create]
   end
-  
-  resources :orders, only: [] do
-    resource :address, only: [:create]
-  end
 end

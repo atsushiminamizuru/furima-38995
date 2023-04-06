@@ -52,5 +52,5 @@ class ItemPrefecture < ActiveHash::Base
 
   include ActiveHash::Associations
   has_many :items
-  has_many :addresses
+  # has_many :addresses #=>addressは登録したprefectureを表示しない為、アソシエーション不要
 end
