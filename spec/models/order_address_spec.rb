@@ -7,19 +7,22 @@ RSpec.describe OrderAddress, type: :model do
       @order_address = FactoryBot.build(:order_address, user_id: order.user_id, item_id: order.item_id)
     end
     context '購入できる場合' do
-      it 'postal_code、city、addresses、phone_number、item_prefectureが存在すれば登録できる' do
+      it 'postal_code、city、addresses、phone_number、item_prefectureが存在すれば購入できる' do
         expect(@order_address).to be_valid
       end
-      it 'postal_codeが3桁ハイフン4桁の半角文字列であれば登録できる' do
+      it 'postal_codeが3桁ハイフン4桁の半角文字列であれば購入できる' do
         expect(@order_address).to be_valid
       end
-      it 'phone_numberが10桁以上11桁以内の半角数値であれば登録できる' do
+      it 'phone_numberが10桁以上11桁以内の半角数値であれば購入できる' do
         expect(@order_address).to be_valid
       end
-      it 'userが紐づいていれば登録できる' do
+      it 'userが紐づいていれば購入できる' do
         expect(@order_address).to be_valid
       end
-      it 'itemが紐づいていれば登録できる' do
+      it 'itemが紐づいていれば購入できる' do
+        expect(@order_address).to be_valid
+      end
+      it 'tokenがあれば購入ができる' do
         expect(@order_address).to be_valid
       end
     end
@@ -123,6 +126,11 @@ RSpec.describe OrderAddress, type: :model do
         @order_address.item_id = nil
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include("Item can't be blank")
+      end
+      it 'tokenが空では購入できない' do
+        @order_address.token = nil
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include("Token can't be blank")
       end
     end
   end

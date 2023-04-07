@@ -1,8 +1,9 @@
 class OrderAddress
   include ActiveModel::Model
-  attr_accessor :item_id, :user_id, :postal_code, :item_prefecture_id, :city, :addresses, :building, :phone_number
+  attr_accessor :item_id, :user_id, :postal_code, :item_prefecture_id, :city, :addresses, :building, :phone_number, :token
 
   with_options presence: true do
+    validates :token
     validates :item_id
     validates :user_id
     validates :postal_code, format: { with: /\A\d{3}-\d{4}\z/, message: 'is invalid. Enter it as follows (e.g. 123-4567)' }
