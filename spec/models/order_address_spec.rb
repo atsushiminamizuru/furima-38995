@@ -54,18 +54,18 @@ RSpec.describe OrderAddress, type: :model do
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include('Postal code is invalid. Enter it as follows (e.g. 123-4567)')
       end
-      it 'postal_codeは半角数字が含まれている場合、登録できない' do
-        @order_address.postal_code = '123-4567'.to_i
-        @order_address.valid?
-        expect(@order_address.errors.full_messages).to include('Postal code is invalid. Enter it as follows (e.g. 123-4567)')
-      end
       it 'postal_codeは全角英字が含まれている場合、登録できない' do
-        @order_address.postal_code = '123-456A'
+        @order_address.postal_code = '123-456Ａ'
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include('Postal code is invalid. Enter it as follows (e.g. 123-4567)')
       end
       it 'postal_codeは全角数字が含まれている場合、登録できない' do
         @order_address.postal_code = '123-456７'
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include('Postal code is invalid. Enter it as follows (e.g. 123-4567)')
+      end
+      it 'postal_codeは全角記号が含まれている場合、登録できない' do
+        @order_address.postal_code = '123-456％'
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include('Postal code is invalid. Enter it as follows (e.g. 123-4567)')
       end
@@ -79,7 +79,12 @@ RSpec.describe OrderAddress, type: :model do
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include('Phone number is invalid. Input only number')
       end
-      it 'phone_numberは半角文字が含まれている場合、登録できない' do
+      it 'phone_numberは半角記号が含まれている場合、登録できない' do
+        @order_address.phone_number = '0901234%678'
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include('Phone number is invalid. Input only number')
+      end
+      it 'phone_numberは半角カタカナが含まれている場合、登録できない' do
         @order_address.phone_number = '0901234ｲ678'
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include('Phone number is invalid. Input only number')
@@ -91,6 +96,11 @@ RSpec.describe OrderAddress, type: :model do
       end
       it 'phone_numberは全角数字が含まれている場合、登録できない' do
         @order_address.phone_number = '0901234567８'
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include('Phone number is invalid. Input only number')
+      end
+      it 'phone_numberは全角記号が含まれている場合、登録できない' do
+        @order_address.phone_number = '0901234567％'
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include('Phone number is invalid. Input only number')
       end
