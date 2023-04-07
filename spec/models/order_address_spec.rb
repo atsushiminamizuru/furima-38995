@@ -3,10 +3,8 @@ require 'rails_helper'
 RSpec.describe OrderAddress, type: :model do
   describe '購入情報登録' do
     before do
-      # user = FactoryBot.create(:user)
-      item = FactoryBot.create(:item)
-      # item_prefecture = FactoryBot.create(:item_prefecture)
-      @order_address = FactoryBot.build(:order_address, user_id: item.user_id, item_id: item.id)
+      order = FactoryBot.create(:order)
+      @order_address = FactoryBot.build(:order_address, user_id: order.user_id, item_id: order.item_id)
     end
     context '購入できる場合' do
       it 'postal_code、city、addresses、phone_number、item_prefectureが存在すれば登録できる' do
@@ -107,14 +105,14 @@ RSpec.describe OrderAddress, type: :model do
         expect(@order_address.errors.full_messages).to include('Phone number is too short')
       end
       it 'userが紐づいていなければ登録できない' do
-        @order_address.user_id = 'nil'
+        @order_address.user_id = nil
         @order_address.valid?
-        expect(@order_address.errors.full_messages).to include('User must exist')
+        expect(@order_address.errors.full_messages).to include("User can't be blank")
       end
       it 'itemが紐づいていなければ登録できない' do
-        @order_address.item_id = 'nil'
+        @order_address.item_id = nil
         @order_address.valid?
-        expect(@order_address.errors.full_messages).to include('Item must exist')
+        expect(@order_address.errors.full_messages).to include("Item can't be blank")
       end
     end
   end
