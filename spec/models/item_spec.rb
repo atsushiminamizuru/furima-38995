@@ -17,6 +17,21 @@ RSpec.describe Item, type: :model do
       it 'userが紐づいていれば登録できる' do
         expect(@item).to be_valid
       end
+      it 'item_categoryが紐づいていれば登録できる' do
+        expect(@item).to be_valid
+      end
+      it 'item_sales_statusが紐づいていれば登録できる' do
+        expect(@item).to be_valid
+      end
+      it 'item_shipping_fee_statusが紐づいていれば登録できる' do
+        expect(@item).to be_valid
+      end
+      it 'item_prefectureが紐づいていれば登録できる' do
+        expect(@item).to be_valid
+      end
+      it 'item_scheduled_deliveryが紐づいていれば登録できる' do
+        expect(@item).to be_valid
+      end
     end
     context '新規登録できない場合' do
       it 'imageが空では登録できない' do
@@ -69,8 +84,28 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include('Item price is invalid. Input half-width characters')
       end
-      it 'item_priceは全角数字を含むと登録できない' do
+      it 'item_priceは半角記号が含まれている場合、登録できない' do
+        @item.item_price = '123%56'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Item price is invalid. Input half-width characters')
+      end
+      it 'item_priceは半角カタカナが含まれている場合、登録できない' do
+        @item.item_price = '123ｨ56'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Item price is invalid. Input half-width characters')
+      end
+      it 'item_priceは全角英字が含まれている場合、登録できない' do
+        @item.item_price = '123Ａ56'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Item price is invalid. Input half-width characters')
+      end
+      it 'item_priceは全角数字が含まれている場合、登録できない' do
         @item.item_price = '123４56'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Item price is invalid. Input half-width characters')
+      end
+      it 'item_priceは全角記号が含まれている場合、登録できない' do
+        @item.item_price = '123％56'
         @item.valid?
         expect(@item.errors.full_messages).to include('Item price is invalid. Input half-width characters')
       end
@@ -93,6 +128,31 @@ RSpec.describe Item, type: :model do
         @item.user_id = 'nil'
         @item.valid?
         expect(@item.errors.full_messages).to include('User must exist')
+      end
+      it 'item_categoryが紐づいていなければ登録できない' do
+        @item.item_category_id = 'nil'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Item category can't be blank")
+      end
+      it 'item_sales_statusが紐づいていなければ登録できない' do
+        @item.item_sales_status_id = 'nil'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Item sales status can't be blank")
+      end
+      it 'item_shipping_fee_statusが紐づいていなければ登録できない' do
+        @item.item_shipping_fee_status_id = 'nil'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Item shipping fee status can't be blank")
+      end
+      it 'item_prefectureが紐づいていなければ登録できない' do
+        @item.item_prefecture_id = 'nil'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Item prefecture can't be blank")
+      end
+      it 'item_scheduled_deliveryが紐づいていなければ登録できない' do
+        @item.item_scheduled_delivery_id = 'nil'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Item scheduled delivery can't be blank")
       end
     end
   end

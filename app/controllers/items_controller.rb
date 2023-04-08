@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :matching_login_user, only: [:edit, :update, :destroy]
+  before_action :sold_out_item, only: [:edit, :update, :destroy]
   def new
     @item = Item.new
   end
@@ -15,7 +16,7 @@ class ItemsController < ApplicationController
   end
 
   def index
-    @items = Item.all.order('created_at DESC')
+    @items = Item.includes(:user).order('created_at DESC')
   end
 
   def show
@@ -54,5 +55,10 @@ class ItemsController < ApplicationController
   def matching_login_user
     @item = Item.find(params[:id])
     redirect_to root_path unless current_user.id == @item.user_id
+  end
+
+  def sold_out_item
+    @item = Item.find(params[:id])
+    redirect_to root_path if @item.order.present?
   end
 end

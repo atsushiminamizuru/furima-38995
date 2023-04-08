@@ -118,6 +118,42 @@ RSpec.describe User, type: :model do
         @user.valid?
         expect(@user.errors.full_messages).to include('Password is invalid. Include both letters and numbers')
       end
+      it 'パスワードに半角記号が含まれている場合、登録できない' do
+        @user.password = '123ab%'
+        @user.password_confirmation = '123ab%'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password is invalid. Include both letters and numbers')
+      end
+      it 'パスワードに半角カタカナが含まれている場合、登録できない' do
+        @user.password = '123abｨ'
+        @user.password_confirmation = '123abｨ'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password is invalid. Include both letters and numbers')
+      end
+      it 'パスワードに全角英字が含まれている場合、登録できない' do
+        @user.password = '123abＡ'
+        @user.password_confirmation = '123abＡ'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password is invalid. Include both letters and numbers')
+      end
+      it 'パスワードに全角数字が含まれている場合、登録できない' do
+        @user.password = '123ab６'
+        @user.password_confirmation = '123ab６'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password is invalid. Include both letters and numbers')
+      end
+      it 'パスワードに全角記号が含まれている場合、登録できない' do
+        @user.password = '123ab％'
+        @user.password_confirmation = '123ab％'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password is invalid. Include both letters and numbers')
+      end
+      it 'パスワードに全角（漢字・ひらがな・カタカナ）が含まれている場合、登録できない' do
+        @user.password = '123ab練しゅウ'
+        @user.password_confirmation = '123ab練しゅウ'
+        @user.valid?
+        expect(@user.errors.full_messages).to include('Password is invalid. Include both letters and numbers')
+      end
       it 'passwordとpassword_confirmationが不一致では登録できない' do
         @user.password = '123456'
         @user.password_confirmation = '1234567'
