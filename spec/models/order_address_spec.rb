@@ -11,6 +11,7 @@ RSpec.describe OrderAddress, type: :model do
         expect(@order_address).to be_valid
       end
       it 'buildingは空でも購入できる' do
+        @order_address.building = ''
         expect(@order_address).to be_valid
       end
       it 'postal_codeが3桁ハイフン4桁の半角文字列であれば購入できる' do
