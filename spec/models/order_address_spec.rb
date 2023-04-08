@@ -10,6 +10,9 @@ RSpec.describe OrderAddress, type: :model do
       it 'postal_code、city、addresses、phone_number、item_prefectureが存在すれば購入できる' do
         expect(@order_address).to be_valid
       end
+      it 'buildingは空でも購入できる' do
+        expect(@order_address).to be_valid
+      end
       it 'postal_codeが3桁ハイフン4桁の半角文字列であれば購入できる' do
         expect(@order_address).to be_valid
       end
@@ -114,6 +117,11 @@ RSpec.describe OrderAddress, type: :model do
       end
       it 'phone_numbereが9桁以下の半角数値では登録できない' do
         @order_address.phone_number = Faker::Number.leading_zero_number(digits: 9)
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include('Phone number is too short')
+      end
+      it 'phone_numbereが12桁以上の半角数値では登録できない' do
+        @order_address.phone_number = Faker::Number.leading_zero_number(digits: 12)
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include('Phone number is too short')
       end
